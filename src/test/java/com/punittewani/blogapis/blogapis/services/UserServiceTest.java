@@ -40,7 +40,7 @@ public class UserServiceTest {
 
     @Mock
     private RoleRepo roleRepo;
-     
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -73,7 +73,6 @@ public class UserServiceTest {
     }
     @Test
     public void UserService_GetUser_getUser(){
-        Role role2 = Role.builder().name("Normal").build();
         Set<Role> roles = new HashSet<>();
         User user = User.builder()
         .email("test1@gmail.com")
@@ -96,7 +95,6 @@ public class UserServiceTest {
 
     @Test
     public void UserService_GetAll_returnListofDto(){
-        Role role2 = Role.builder().name("Normal").build();
         UserDto userDto1 = UserDto.builder()
         .email("test1@gmail.com")
         .about("Test")
