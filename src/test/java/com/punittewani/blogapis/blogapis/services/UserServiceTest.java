@@ -3,6 +3,7 @@ package com.punittewani.blogapis.blogapis.services;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -39,37 +40,7 @@ public class UserServiceTest {
 
     @Mock
     private RoleRepo roleRepo;
-    @org.junit.jupiter.api.BeforeEach
-    public void BeforeEach(){
-        Role role2 = Role.builder().name("Normal").build();
-        User user = User.builder()
-                    .email("test@gmail.com")
-                    .name("Test Data")
-                    .password("Punit@92655")
-                    .about("Test About Data")
-                    .roles(Set.of(role2))
-                    .build();
-        User user2 = User.builder()
-                    .email("test@gmail2.com")
-                    .name("Test Data")
-                    .password("Punit@92655")
-                    .about("Test About Data")
-                    .roles(Set.of(role2))
-                    .build();
-        User user3 = User.builder()
-                    .email("test@gmail3.com")
-                    .name("Test Data")
-                    .password("Punit@92655")
-                    .about("Test About Data")
-                    .roles(Set.of(role2))
-                    .build();
-
-       userRepo.save(user);
-       userRepo.save(user2);
-       userRepo.save(user3);
-    }
-
-   
+     
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -124,14 +95,42 @@ public class UserServiceTest {
     }
 
     @Test
-    public void UserService_DtotoUser(){
-        UserDto userDto = UserDto.builder()
-                .email("test1@gmail.com")
-                .about("Test")
-                .build();
-        User user = this.userService.dtoToUser(userDto);
-        // Assertions.assertThat(user).isNotNull();
-        // Assertions.assertThat(user.getEmail()).isEqualTo("test1@gmail.com");
+    public void UserService_GetAll_returnListofDto(){
+        Role role2 = Role.builder().name("Normal").build();
+        UserDto userDto1 = UserDto.builder()
+        .email("test1@gmail.com")
+        .about("Test")
+        .build();
+        UserDto userDto2 = UserDto.builder()
+        .email("test2@gmail.com")
+        .about("Test")
+        .build();
+        Set<Role> roles = new HashSet<>();
+        User user1 = User.builder()
+        .email("test1@gmail.com")
+        .name("Test Data")
+        .password("Punit@92655")
+        .about("Test About Data")
+        .roles(roles)
+        .build();
+      
+        User user2 = User.builder()
+        .email("test2@gmail.com")
+        .name("Test Data")
+        .password("Punit@92655")
+        .about("Test About Data")
+        .roles(roles)
+        .build();
+
+        when(userRepo.findAll()).thenReturn(List.of(user1,user2));
+        when(userService.userToDto(user1)).thenReturn(userDto1);
+        when(userService.userToDto(user2)).thenReturn(userDto2);
+        List<UserDto> userDtos = this.userService.getAllUsers();
+        Assertions.assertThat(userDtos).isNotNull();
+        Assertions.assertThat(userDtos.size()).isEqualTo(2);
+        Assertions.assertThat(userDtos.get(0).getEmail()).isEqualTo("test1@gmail.com");
+        Assertions.assertThat(userDtos.get(1).getEmail()).isEqualTo("test2@gmail.com");
+        Assertions.assertThat(userDtos.get(1).getEmail()).isNotEqualTo("test1@gmail.com");
     }
 
 }

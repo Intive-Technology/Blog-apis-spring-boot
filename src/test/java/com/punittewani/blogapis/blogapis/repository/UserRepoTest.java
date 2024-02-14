@@ -17,6 +17,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.HashSet;
 import java.util.List;
 import com.punittewani.blogapis.blogapis.configuration.TestConfig;
 import com.punittewani.blogapis.blogapis.entities.Role;
@@ -35,27 +36,31 @@ public class UserRepoTest {
 
     @org.junit.jupiter.api.BeforeEach
     public void BeforeEach(){
+        Set<Role> roles = new HashSet<>();
         Role role2 = Role.builder().name("Normal").build();
+        roles.add(role2);
+
         User user = User.builder()
+
                     .email("test@gmail.com")
                     .name("Test Data")
                     .password("Punit@92655")
                     .about("Test About Data")
-                    .roles(Set.of(role2))
+                    .roles(roles)
                     .build();
         User user2 = User.builder()
                     .email("test@gmail2.com")
                     .name("Test Data")
                     .password("Punit@92655")
                     .about("Test About Data")
-                    .roles(Set.of(role2))
+                    .roles(roles)
                     .build();
         User user3 = User.builder()
                     .email("test@gmail3.com")
                     .name("Test Data")
                     .password("Punit@92655")
                     .about("Test About Data")
-                    .roles(Set.of(role2))
+                    .roles(roles)
                     .build();
 
        userRepo.save(user);
@@ -85,6 +90,7 @@ public class UserRepoTest {
     @Test
     public void UserRepo_findByEmail_ReturnUser(){
         User user = userRepo.findByEmail("test@gmail.com").get();
+        System.out.println("USER ID FROM THE TEST"+user.getId());
         Assertions.assertThat(user).isNotNull();
     }
     @Test
@@ -100,5 +106,16 @@ public class UserRepoTest {
         Assertions.assertThat(user).isNotNull();
         userRepo.delete(user);
         assertThrows(InvalidDataAccessResourceUsageException.class,(()-> userRepo.findByEmail("test@gmail.com").get()));
+    }
+
+    @Test
+    public void UserRepo_update(){
+        User user = userRepo.findByEmail("test@gmail.com").get();
+        Assertions.assertThat(user.getName()).isEqualTo("Test Data");
+        Assertions.assertThat(user.getName()).isNotEqualTo("Punit");
+        user.setName("Punit");
+        userRepo.save(user);
+        User updatedUser = userRepo.findByEmail("test@gmail.com").get();
+        Assertions.assertThat(updatedUser.getName()).isEqualTo("Punit");
     }
 }
