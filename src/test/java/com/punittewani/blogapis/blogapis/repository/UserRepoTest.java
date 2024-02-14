@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import com.punittewani.blogapis.blogapis.repositories.UserRepo;
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Import(TestConfig.class)
+@ActiveProfiles("test")
 public class UserRepoTest {
     @Autowired
     private UserRepo userRepo;
@@ -33,7 +35,6 @@ public class UserRepoTest {
 
     @org.junit.jupiter.api.BeforeEach
     public void BeforeEach(){
-        Role role1 = Role.builder().name("Admin").build();
         Role role2 = Role.builder().name("Normal").build();
         User user = User.builder()
                     .email("test@gmail.com")
@@ -64,7 +65,6 @@ public class UserRepoTest {
     @Test
     @Disabled
     public void UserRepo_save_ReturnSavedUser(){
-        Role role1 = Role.builder().name("Admin").build();
         Role role2 = Role.builder().name("Normal").build();
         User user = User.builder()
                     .email("test1@gmail.com")

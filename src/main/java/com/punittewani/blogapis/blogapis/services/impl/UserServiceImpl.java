@@ -15,23 +15,28 @@ import com.punittewani.blogapis.blogapis.payloads.UserDto;
 import com.punittewani.blogapis.blogapis.repositories.RoleRepo;
 import com.punittewani.blogapis.blogapis.repositories.UserRepo;
 import com.punittewani.blogapis.blogapis.services.UserService;
+
+import lombok.RequiredArgsConstructor;
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserRepo userRepo;
+    
+    private final UserRepo userRepo;
 
-    @Autowired 
-    private ModelMapper modelMapper;
+   
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private RoleRepo roleRepo;
+
+    private final  RoleRepo roleRepo;
 
     @Override
     public UserDto createUser(UserDto user) {
         User userEntity = this.dtoToUser(user);
         Role normalRole = this.roleRepo.findById(AppConfig.NORMAL_ROLE_ID).orElseThrow(()->new ResourceNotFoundException("ROle", "ID", AppConfig.ADMIN_ROLE_ID));
+        System.out.println("Helllllo from service");
         userEntity.getRoles().add(normalRole);
         User savedUser = this.userRepo.save(userEntity);
+        System.out.println("Saved User From Service: "+ savedUser); 
         return this.userToDto(savedUser);
     }
 
@@ -71,7 +76,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public User dtoToUser(UserDto userDto) {
-        return this.modelMapper.map(userDto, User.class);
+        System.out.println(this.modelMapper);
+        User user = this.modelMapper.map(userDto, User.class);
+        System.out.println("User from dto user :- "+ user);
+        return user;
     }
 
     public UserDto userToDto(User user) {
