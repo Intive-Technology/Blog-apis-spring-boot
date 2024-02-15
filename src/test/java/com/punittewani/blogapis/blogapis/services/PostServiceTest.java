@@ -1,28 +1,24 @@
 package com.punittewani.blogapis.blogapis.services;
 
-import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
-import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import java.util.Optional;
 
-import com.punittewani.blogapis.blogapis.BlogapisApplication;
 import com.punittewani.blogapis.blogapis.configuration.TestConfig;
 import com.punittewani.blogapis.blogapis.entities.Categories;
 import com.punittewani.blogapis.blogapis.entities.Posts;
