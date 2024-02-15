@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import com.punittewani.blogapis.blogapis.configuration.TestConfig;
 import com.punittewani.blogapis.blogapis.entities.Role;
 import com.punittewani.blogapis.blogapis.entities.User;
@@ -105,7 +107,7 @@ public class UserRepoTest {
         User user = userRepo.findByEmail("test@gmail.com").get();
         Assertions.assertThat(user).isNotNull();
         userRepo.delete(user);
-        assertThrows(InvalidDataAccessResourceUsageException.class,(()-> userRepo.findByEmail("test@gmail.com").get()));
+        assertThrows(NoSuchElementException.class,(()-> userRepo.findByEmail("test@gmail.com").get()));
     }
 
     @Test
