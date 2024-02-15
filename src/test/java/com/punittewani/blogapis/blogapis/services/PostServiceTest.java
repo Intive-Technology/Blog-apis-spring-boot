@@ -61,31 +61,44 @@ public class PostServiceTest {
 public void setup() {
     User user = User.builder().name("test").email("test@gmail.com").id(1).build();
     Categories categories = Categories.builder().title("trst").build();
-    Page<Posts> pagePost  = Mockito.mock(Page.class);
     Posts post = Posts.builder().title("test").content("date").build();
     PostsDto postsDto = PostsDto.builder().title("test").content("date").build();
-    Mockito.when(modelMapperSpy.map(Mockito.any(PostsDto.class), Mockito.eq(Posts.class))).thenReturn(post);
-    Mockito.when(modelMapperSpy.map(Mockito.any(Posts.class), Mockito.eq(PostsDto.class))).thenReturn(postsDto);
     Mockito.when(this.userRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(user));
     Mockito.when(this.categoryRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(categories));
-    Mockito.when(this.postRepo.save(Mockito.any(Posts.class))).thenReturn(post);
-    Mockito.when(this.postRepo.findAll(Mockito.any(Pageable.class))).thenReturn(pagePost);
+    Mockito.when(modelMapperSpy.map(Mockito.any(PostsDto.class), Mockito.eq(Posts.class))).thenReturn(post);
     postService.createPost(postsDto,1,1);
 
 }
 
     @Test
     public void PostService_CreatePost_ReturnPostDto() {
+        Posts post = Posts.builder().title("test").content("date").build();
         PostsDto postsDto = PostsDto.builder().title("test").content("date").build();
+        Mockito.when(this.postRepo.save(Mockito.any(Posts.class))).thenReturn(post);
+        Mockito.when(modelMapperSpy.map(Mockito.any(PostsDto.class), Mockito.eq(Posts.class))).thenReturn(post);
+        Mockito.when(modelMapperSpy.map(Mockito.any(Posts.class), Mockito.eq(PostsDto.class))).thenReturn(postsDto);
         PostsDto postDto = postService.createPost(postsDto,1,1);
         Assertions.assertThat(postDto).isNotNull();
     }
 
     @Test
     public void PostService_getAll_returnsPostDTO(){
+        Page<Posts> pagePost  = Mockito.mock(Page.class);
+        Mockito.when(this.postRepo.findAll(Mockito.any(Pageable.class))).thenReturn(pagePost);
         PostResponse posts = postService.getAllPost(0, 10, "title", "ASC");
         System.out.println("Post: "+ posts);
         System.out.println(posts.getContent());
         Assertions.assertThat(posts).isNotNull();  
+    }
+
+    @Test
+    public void PostService_findById_returnPost(){
+        Posts post = Posts.builder().title("test").content("date").build();
+        PostsDto postsDto = PostsDto.builder().title("test").content("date").build();
+        Mockito.when(this.postRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(post));
+        Mockito.when(modelMapperSpy.map(Mockito.any(Posts.class), Mockito.eq(PostsDto.class))).thenReturn(postsDto);
+        PostsDto posts = postService.getPostById(1);
+        System.out.println("Post: "+ posts);
+        Assertions.assertThat(posts).isNotNull();
     }
 }
